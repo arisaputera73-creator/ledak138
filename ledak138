@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slot Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #111;
+      color: #fff;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    .slot {
+      display: flex;
+      justify-content: center;
+      margin: 20px;
+      font-size: 40px;
+    }
+    .slot div {
+      margin: 0 10px;
+      padding: 20px;
+      background: #222;
+      border-radius: 10px;
+      width: 60px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background: limegreen;
+      color: black;
+      cursor: pointer;
+    }
+    button:hover {
+      background: gold;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎰 Slot Demo</h1>
+  <div class="slot">
+    <div id="s1">🍒</div>
+    <div id="s2">🍋</div>
+    <div id="s3">🍊</div>
+  </div>
+  <button onclick="spin()">SPIN</button>
+  <div id="result"></div>
+
+  <script>
+    const symbols = ["🍒","🍋","🍊","🍉","⭐","7️⃣"];
+    
+    function spin() {
+      let s1 = symbols[Math.floor(Math.random()*symbols.length)];
+      let s2 = symbols[Math.floor(Math.random()*symbols.length)];
+      let s3 = symbols[Math.floor(Math.random()*symbols.length)];
+      
+      document.getElementById("s1").innerText = s1;
+      document.getElementById("s2").innerText = s2;
+      document.getElementById("s3").innerText = s3;
+      
+      if(s1 === s2 && s2 === s3){
+        document.getElementById("result").innerText = "🎉 Jackpot!";
+      } else if(s1 === s2 || s2 === s3 || s1 === s3){
+        document.getElementById("result").innerText = "✨ Lumayan!";
+      } else {
+        document.getElementById("result").innerText = "😢 Coba lagi...";
+      }
+    }
+  </script>
+</body>
+</html>
