@@ -2,10 +2,136 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Halo Dunia</title>
+  <title>Mahjong Ways Demo</title>
+  <style>
+    body {
+      background: #222;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      padding: 20px;
+      background: goldenrod;
+      margin: 0;
+    }
+    #balance {
+      margin: 15px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .slot {
+      display: grid;
+      grid-template-columns: repeat(5, 80px);
+      grid-template-rows: repeat(3, 80px);
+      gap: 10px;
+      justify-content: center;
+      margin: 20px;
+    }
+    .cell {
+      background: #333;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+    }
+    button {
+      padding: 12px 20px;
+      margin: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: limegreen;
+      color: #000;
+    }
+    button:hover {
+      background: gold;
+    }
+    #message {
+      margin-top: 15px;
+      font-size: 20px;
+      min-height: 28px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Selamat datang di situs pertamaku!</h1>
-  <p>Ini halaman yang dibuat pakai GitHub Pages.</p>
+  <h1>🎰 Mahjong Ways Demo 🎰</h1>
+  <div id="balance"></div>
+  <div class="slot" id="slot"></div>
+  <button onclick="spin()">SPIN</button>
+  <button onclick="resetSaldo()">RESET SALDO</button>
+  <div id="message"></div>
+
+  <script>
+    // ====== SETTING GAME ======
+    let saldoAwal = 20000;        // saldo awal (ubah sesuka hati)
+    let taruhan = 1000;           // sekali spin potong saldo
+    let hadiahJackpot = 5000;     // hadiah kalau semua sama
+    let simbolScatter = "🀄";     // simbol scatter
+    let minScatter = 3;           // jumlah scatter minimal untuk menang free spin
+
+    // simbol Mahjong (bisa ditambah sesuka hati)
+    const simbols = ["🀄","🀇","🀈","🀉","🀊","🀋","🀌","💰","✨"];
+
+    let saldo = saldoAwal;
+
+    const slot = document.getElementById("slot");
+    const balance = document.getElementById("balance");
+    const message = document.getElementById("message");
+
+    function updateSaldo() {
+      balance.innerText = "Saldo: " + saldo;
+    }
+
+    function spin() {
+      if (saldo < taruhan) {
+        message.innerText = "Saldo tidak cukup!";
+        return;
+      }
+
+      saldo -= taruhan;
+      slot.innerHTML = "";
+      let hasil = [];
+      let scatterCount = 0;
+
+      for (let i = 0; i < 15; i++) {
+        let sym = simbols[Math.floor(Math.random()*simbols.length)];
+        hasil.push(sym);
+
+        if(sym === simbolScatter) scatterCount++;
+
+        let cell = document.createElement("div");
+        cell.className = "cell";
+        cell.innerText = sym;
+        slot.appendChild(cell);
+      }
+
+      // cek hasil
+      if (scatterCount >= minScatter) {
+        saldo += hadiahJackpot * scatterCount; 
+        message.innerText = "🎉 SCATTER " + scatterCount + "x! Menang besar!";
+      } else if (new Set(hasil).size === 1) {
+        saldo += hadiahJackpot;
+        message.innerText = "💎 JACKPOT Semua sama!";
+      } else {
+        message.innerText = "😢 Coba lagi...";
+      }
+
+      updateSaldo();
+    }
+
+    function resetSaldo() {
+      saldo = saldoAwal;
+      updateSaldo();
+      message.innerText = "Saldo direset ke " + saldoAwal;
+    }
+
+    // inisialisasi pertama
+    updateSaldo();
+  </script>
 </body>
 </html>
